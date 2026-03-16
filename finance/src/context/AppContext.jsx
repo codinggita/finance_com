@@ -3,7 +3,7 @@ import axios from 'axios'
 
 export const AppContext = createContext()
 
-const API = 'http://localhost:5000/api'
+const API = 'https://finance-com-3pd2.onrender.com/api'
 
 export const AppProvider = ({ children }) => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || null)
