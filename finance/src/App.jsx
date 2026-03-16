@@ -1,34 +1,48 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
+import { useContext } from 'react'
+import { AppProvider, AppContext } from './context/AppContext'
+import Sidebar from './components/Sidebar'
+import Dashboard from './pages/Dashboard'
+import AddEntry from './pages/AddEntry'
+import History from './pages/History'
+import Goals from './pages/Goals'
+import SIPCalc from './pages/SIPCalc'
+import Achievements from './pages/Achievements'
+import Login from './pages/Login'
+import Register from './pages/Register'
+
+const PrivateRoute = ({ children }) => {
+  const { user } = useContext(AppContext)
+  return user ? children : <Navigate to="/login" />
+}
+
+const Layout = ({ children }) => {
+  return (
+    <div className="flex min-h-screen bg-gray-50">
+      <Sidebar />
+      <main className="flex-1 p-6 overflow-y-auto">
+        {children}
+      </main>
+    </div>
+  )
+}
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <AppProvider>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/" element={<PrivateRoute><Layout><Dashboard /></Layout></PrivateRoute>} />
+          <Route path="/add" element={<PrivateRoute><Layout><AddEntry /></Layout></PrivateRoute>} />
+          <Route path="/history" element={<PrivateRoute><Layout><History /></Layout></PrivateRoute>} />
+          <Route path="/goals" element={<PrivateRoute><Layout><Goals /></Layout></PrivateRoute>} />
+          <Route path="/sip" element={<PrivateRoute><Layout><SIPCalc /></Layout></PrivateRoute>} />
+          <Route path="/achievements" element={<PrivateRoute><Layout><Achievements /></Layout></PrivateRoute>} />
+        </Routes>
+      </Router>
+    </AppProvider>
   )
 }
 
