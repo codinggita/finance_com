@@ -5,7 +5,10 @@ require('dotenv').config();
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: 'https://finance-com01.onrender.com',
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -26,5 +29,3 @@ mongoose
     app.listen(PORT, () => console.log(`✅ Server running on port ${PORT}`));
   })
   .catch((err) => console.log('❌ DB Error:', err));
-   
-                                                 
